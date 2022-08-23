@@ -6,5 +6,5 @@
 
 ## Arquitetura e Ferramentas
 
-* Python3.10
-* Poetry
+- Python3.10
+- Poetry
