@@ -13,7 +13,7 @@ class Tools():
     def __init__(self) -> None:
         super().__init__();
         
-    def generateFilesPython(self,path:str="./") -> None:
+    def generateFilesPythonMatriz(self,path:str="./") -> None:
         """Generate Files Python
         
         Neste método criamos os arquivos python que contém uma 
@@ -26,7 +26,7 @@ class Tools():
             for file in self.getFiles(path=path):
                 local_file = os.path.join(path,file);
                 matriz = self.readFileMatriz(file=local_file);
-                [status,_] = self.createFilePython(
+                [status,_] = self.createFilePythonMatriz(
                     matriz=matriz,
                     file_name=os.path.splitext(file)[0],
                     path=path
@@ -101,7 +101,7 @@ class Tools():
             return [];
     
     @staticmethod
-    def createFilePython(matriz:list[list[int]]=[],file_name:str="dzn",path:str="./") -> tuple[bool,Union[str,None]]:
+    def createFilePythonMatriz(matriz:list[list[int]]=[],file_name:str="dzn",path:str="./") -> tuple[bool,Union[str,None]]:
         """Create File Python
         
         Neste método fazemos a criação do arquivo python com a matriz de valores inteiros.
