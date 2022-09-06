@@ -163,6 +163,15 @@ class Tools():
     
     @staticmethod
     def saveData(file:str="",data:str=""):
+        """Save Data
+
+        Neste método nós salvamos o que for passado para o 
+        arquivo solicitado.
+        
+        Args:
+            file (str): Arquivo para o salvamento.
+            data (str): Os dados para o salvamento.
+        """
         try:
             with open(file,'a') as writer:
                 writer.write(f"{data}\n");
