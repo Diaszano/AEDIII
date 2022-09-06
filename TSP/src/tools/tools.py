@@ -1,5 +1,6 @@
 import os
 import re
+import time
 from typing import Generator, Union
 
 
@@ -116,8 +117,7 @@ class Tools():
         """
         try:
             file = os.path.join(path,f"{file_name}.py");
-            with open(file,'w') as ficheiro:
-                writer = ficheiro;
+            with open(file,'w') as writer:
                 matriz = str(matriz).replace('], ','],\n');
 
                 texto:str = (
@@ -131,7 +131,44 @@ class Tools():
         except Exception as erro:
             print(f"Erro: {erro}");
             return (False,None);
+    
+    @staticmethod
+    def benchmarkingFunction(func):
+        """Benchmarking de Função
+        
+        Neste método temos um decorador de função, que tem como
+        seu proposito fazer o cálculo do tempo que uma função 
+        demora para ser executada.
+
+        Args:
+            func (function): Função a ser testada.
+        """
+        def run_function(*args, **kwargs):
+            inicio = time.time();
+            resultado = func(*args, **kwargs);
+            fim = time.time();
+            
+            tempo:float = fim-inicio;
+            
+            print(f'Função[{func.__name__!r}] executada em {(tempo):.4f}s');
+            
+            retorno:dict = {
+                "return":resultado,
+                "Tempo":tempo
+            };
+            
+            return retorno;
+        
+        return run_function;
+    
+    @staticmethod
+    def saveData(file:str="",data:str=""):
+        try:
+            with open(file,'a') as writer:
+                writer.write(f"{data}\n");
+        except Exception as erro:
+            print(f"Erro: {erro}");
 
 
 if __name__ == "__main__":
-    Tools().generateFilesPython("../data/")
+    pass;

@@ -1,13 +1,14 @@
+import os
 import sys 
 import itertools
+from typing import Union
+import concurrent.futures
 from tools.tools import Tools
 
-path  :str             = "./data/";
-matriz:list[list[int]] = Tools.readFileMatriz(
-    f"/home/diaszano/Programas/Python/AEDIII/TSP/tsp/data/tsp1_253.txt"
-);
+FILE_SAVE:str = "./data/resultados/resultados.csv";
 
-def tsp(matriz:list[list[int]]=[],inicio:int=0) -> int:
+@Tools.benchmarkingFunction
+def tsp(matriz:list[list[int]]=[],inicio:int=0,arquivo:str=None) -> tuple[int,Union[str,None]]:
     """Problema do Caixeiro Viajante (TSP)
     
     Dado um conjunto de cidades e distâncias entre cada par de cidades, 
@@ -22,28 +23,70 @@ def tsp(matriz:list[list[int]]=[],inicio:int=0) -> int:
         opcional o local de início da busca da menor rota.
 
     Returns:
-        int: Nós retornamos o menor valor encontrado pelo algorítimo.
+        tuple: Nós retornamos uma tupla com o valor do menor e o 
+        arquivo.
     """
-    vertex:list[int] = (
-        i
-        for i in range(len(matriz))
-            if i != inicio
-    );
-    menor_caminho:int = sys.maxsize;
-    
-    for i in itertools.permutations(vertex):
-        caminho_atual:int = 0;
-        k            :int = inicio;
+    try:
+        vertex:list[int] = (
+            i
+            for i in range(len(matriz))
+                if i != inicio
+        );
+        menor_caminho:int = sys.maxsize;
         
-        for j in i:
-            caminho_atual += matriz[k][j];
-            k = j;
+        for i in itertools.permutations(vertex):
+            caminho_atual:int = 0;
+            k            :int = inicio;
             
-        caminho_atual += matriz[k][inicio];
-        menor_caminho = min(menor_caminho, caminho_atual);
-        
-    return menor_caminho;
+            for j in i:
+                caminho_atual += matriz[k][j];
+                k = j;
+                
+            caminho_atual += matriz[k][inicio];
+            menor_caminho = min(menor_caminho, caminho_atual);
+            
+        return menor_caminho,arquivo;
+    except Exception as erro:
+        print(f"Erro: {erro}");
+        return -1 * sys.maxsize,None; 
 
 
 if __name__ == "__main__":
-    print(tsp(matriz))
+    try:
+        with open(FILE_SAVE,'w') as writer:
+            cabecalho:str = "Arquivo,Resultado,Tempo";
+            writer.write(f"{cabecalho}\n");
+    except Exception as erro:
+        print(f"Erro: {erro}")
+        sys.exit(0);
+    try:
+        arquivos = Tools.getFiles(path="./data/matrizes");
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            tasks = (
+                executor.submit(
+                    tsp,
+                    matriz=Tools.readFileMatriz(
+                        file=os.path.join(
+                            "./data/matrizes",
+                            arquivo
+                        )
+                    ),
+                    arquivo=arquivo
+                )
+                for arquivo in Tools.getFiles(path="./data/matrizes")
+            );
+            
+            for result in concurrent.futures.as_completed(tasks):
+                resultado = result.result();
+                mensagem:str = (
+                    f"{resultado['return'][1]},"
+                    f"{resultado['return'][0]},"
+                    f"{float(resultado['Tempo']):.4f}"
+                );
+                
+                Tools.saveData(
+                    file=FILE_SAVE,
+                    data=mensagem
+                );
+    except Exception as erro:
+        print(f"Erro: {erro}");
