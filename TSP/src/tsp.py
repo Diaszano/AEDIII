@@ -52,6 +52,9 @@ def tsp(matriz:list[list[int]]=[],inicio:int=0,arquivo:str=None) -> tuple[int,Un
 
 
 if __name__ == "__main__":
+    print("#"*50);
+    print("Programa Iniciado");
+    print("#"*50);
     try:
         with open(FILE_SAVE,'w') as writer:
             cabecalho:str = "Arquivo,Resultado,Tempo";
@@ -90,3 +93,6 @@ if __name__ == "__main__":
                 );
     except Exception as erro:
         print(f"Erro: {erro}");
+    print("#"*50);
+    print("Finalizado");
+    print("#"*50);
