@@ -1,0 +1,16 @@
+{
+    "cSpell.words": [
+        "Constrs",
+        "gurobipy",
+        "quicksum",
+        "saida",
+        "vtype"
+    ],
+    "files.exclude": {
+        "**/.git": true,
+        "**/.venv": true,
+        "**/.vscode": true,
+        "**/__init__.py": true,
+        "**/__pycache__": true
+    }
+}
