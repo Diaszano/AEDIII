@@ -180,4 +180,4 @@ class Tools():
 
 
 if __name__ == "__main__":
-    pass;
+    Tools().generateFilesPythonMatriz("../data/matrizes")
