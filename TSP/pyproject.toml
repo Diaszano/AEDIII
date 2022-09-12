@@ -6,6 +6,9 @@ authors = ["Diaszano <lucasdiiassantos@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.10"
+numpy = "^1.23.3"
+networkx = "^2.8.6"
+pytsp = "^0.2.7"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
